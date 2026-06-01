@@ -1,17 +1,19 @@
 {
   "$schema": "https://koydo-design.koydo.app/schemas/design-lock.schema.json",
-  "lockedAt": "2026-06-01T20:24:57.639Z",
+  "lockedAt": "2026-06-01T21:01:58.173Z",
   "lockedBy": "propagate-agents-md@mac-mini",
   "synced": {
     "site-footer": {
-      "manifestSha": "sha256:pending-phase-1-build-manifest",
+      "manifestSha": "sha256:a80c20cfa3a3084aee565c2c2483e4717a79eb358d00e0ece02d93f50ed4c765",
       "consumerPath": "src/components/koydo-footer/",
-      "syncScript": "sync-koydo-footer.mjs"
+      "syncScript": "sync-koydo-footer.mjs",
+      "version": "1.4.0"
     },
     "tokens": {
-      "manifestSha": "sha256:pending-phase-1-build-manifest",
+      "manifestSha": "sha256:10f508c5f619d989dceafb1c70783ad54e3ec63397e477cd98664752be52fdd4",
       "consumerPath": "src/styles/koydo-tokens.css",
-      "syncScript": "sync-koydo-design-tokens.mjs"
+      "syncScript": "sync-koydo-design-tokens.mjs",
+      "version": "2025.10.0"
     }
   }
 }
