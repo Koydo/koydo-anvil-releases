@@ -6,7 +6,7 @@
 **Repo:** `koydo-anvil-releases`
 **Repo type:** `content`
 **Origin:** `https://github.com/Koydo/koydo-anvil-releases.git`
-**Last synced from canon:** `2026-06-07` (manifest sha: see `design-lock.json`)
+**Last synced from canon:** `2026-06-14` (manifest sha: see `design-lock.json`)
 
 ---
 
@@ -156,3 +156,11 @@ This file is checked at agent startup. Required companions:
 - `./CODEOWNERS` (when on GitHub) — routes design-canon paths to `@koydo/design-canon`
 
 When this file's `Last synced from canon` is older than 14 days, run `~/koydo-design/scripts/propagate-design-ssot.mjs --target=koydo-anvil-releases` to refresh.
+
+## 11. Token discipline (all agents)
+
+Be token-frugal without sacrificing correctness:
+
+- Use the cheapest capable model/mode for the task; reserve premium models for genuinely hard reasoning. Never run a monitor / poll / watch loop on a premium model.
+- Load only the context and tools the task needs — no speculative pre-loading; targeted line-range reads over whole-file re-reads; never re-read a file you just wrote; don't auto-pull large reference docs.
+- Prefer event / notify-on-completion over polling. Answer at the altitude asked; don't pad; reuse prior context instead of re-deriving.

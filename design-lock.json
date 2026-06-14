@@ -1,6 +1,6 @@
 {
   "$schema": "https://koydo-design.koydo.app/schemas/design-lock.schema.json",
-  "lockedAt": "2026-06-01T21:01:58.173Z",
+  "lockedAt": "2026-06-14T08:01:35.046Z",
   "lockedBy": "propagate-agents-md@mac-mini",
   "synced": {
     "site-footer": {
@@ -10,7 +10,7 @@
       "version": "1.4.0"
     },
     "tokens": {
-      "manifestSha": "sha256:10f508c5f619d989dceafb1c70783ad54e3ec63397e477cd98664752be52fdd4",
+      "manifestSha": "sha256:f8090c14d845336ff87479c72a13f7fc589db0943e08551300cb086db08721c2",
       "consumerPath": "src/styles/koydo-tokens.css",
       "syncScript": "sync-koydo-design-tokens.mjs",
       "version": "2025.10.0"
