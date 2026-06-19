@@ -6,7 +6,7 @@
 **Repo:** `koydo-anvil-releases`
 **Repo type:** `content`
 **Origin:** `https://github.com/Koydo/koydo-anvil-releases.git`
-**Last synced from canon:** `2026-06-14` (manifest sha: see `design-lock.json`)
+**Last synced from canon:** `2026-06-19` (manifest sha: see `design-lock.json`)
 
 ---
 
@@ -164,3 +164,11 @@ Be token-frugal without sacrificing correctness:
 - Use the cheapest capable model/mode for the task; reserve premium models for genuinely hard reasoning. Never run a monitor / poll / watch loop on a premium model.
 - Load only the context and tools the task needs — no speculative pre-loading; targeted line-range reads over whole-file re-reads; never re-read a file you just wrote; don't auto-pull large reference docs.
 - Prefer event / notify-on-completion over polling. Answer at the altitude asked; don't pad; reuse prior context instead of re-deriving.
+
+## 12. AI consensus & adjudication
+
+For any decision important enough that one model's word isn't enough — translation / localization QA, legal / compliance review, code review, content moderation, factual or claims verification, design A/B — use the ONE canonical panel; never fork a bespoke two-model/LLM-judge gate.
+
+- **Vendor it:** `node ~/koydo-design/scripts/sync-ai-consensus.mjs --target=koydo-anvil-releases --apply` → `tools/ai-consensus/`.
+- **Use it:** `import { adjudicate } from "./tools/ai-consensus/consensus.mjs"`. Judges in priority order OpenAI → Anthropic → Gemini → xAI; starts with the **two available** (live-probed, so unfunded providers are skipped), **expands** on large divergence, **escalates** to a human / the Opus orchestrator on no majority.
+- Spec: `~/koydo-design/principles/ai-consensus-adjudication.md`. Keys are **server-side only**. Do NOT re-implement two-model review — extend the canon.
