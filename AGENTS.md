@@ -6,7 +6,7 @@
 **Repo:** `koydo-anvil-releases`
 **Repo type:** `content`
 **Origin:** `https://github.com/Koydo/koydo-anvil-releases.git`
-**Last synced from canon:** `2026-06-21` (manifest sha: see `design-lock.json`)
+**Last synced from canon:** `2026-06-25` (manifest sha: see `design-lock.json`)
 
 ---
 
