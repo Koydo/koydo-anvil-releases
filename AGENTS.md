@@ -6,7 +6,7 @@
 **Repo:** `koydo-anvil-releases`
 **Repo type:** `content`
 **Origin:** `https://github.com/Koydo/koydo-anvil-releases.git`
-**Last synced from canon:** `2026-06-07` (manifest sha: see `design-lock.json`)
+**Last synced from canon:** `2026-06-25` (manifest sha: see `design-lock.json`)
 
 ---
 
@@ -123,6 +123,25 @@ Per `~/.claude/CLAUDE.md`:
 
 ---
 
+## 7b. Read the code on disk before changing it (HARD LAW)
+
+Per `~/koydo-design/principles/read-code-before-changing.md`:
+
+- **Never edit, overwrite, or delete a file you did not just read on disk.**
+  Acting from memory, a filename, an assumption about "what the scaffold
+  contains", or a stale summary is forbidden. If you didn't read it, you don't
+  know what it says — and you may not change it.
+- **Read canon before citing it.** Open the actual principle/ADR in
+  `~/koydo-design` before applying it. The canon must be **present on disk**; if
+  `~/koydo-design` is missing, restore it before proceeding — never work around
+  absent canon:
+  `git clone --filter=blob:none https://github.com/Koydo/koydo-design.git ~/koydo-design`
+- Most production defects (the "87% Koydo net margin" leak, the legal-markdown
+  truncation, the 184 deleted manifests) were agents changing code they never
+  read. Changing a file you did not read is a review-blocking defect.
+
+---
+
 ## 8. Destructive-change protocol
 
 Per `~/koydo-design/principles/destructive-change-protocol.md`:
@@ -156,3 +175,28 @@ This file is checked at agent startup. Required companions:
 - `./CODEOWNERS` (when on GitHub) — routes design-canon paths to `@koydo/design-canon`
 
 When this file's `Last synced from canon` is older than 14 days, run `~/koydo-design/scripts/propagate-design-ssot.mjs --target=koydo-anvil-releases` to refresh.
+
+## 11. Token discipline (all agents)
+
+Be token-frugal without sacrificing correctness:
+
+- Use the cheapest capable model/mode for the task; reserve premium models for genuinely hard reasoning. Never run a monitor / poll / watch loop on a premium model.
+- Load only the context and tools the task needs — no speculative pre-loading; targeted line-range reads over whole-file re-reads; never re-read a file you just wrote; don't auto-pull large reference docs.
+- Prefer event / notify-on-completion over polling. Answer at the altitude asked; don't pad; reuse prior context instead of re-deriving.
+
+## 12. AI consensus & adjudication
+
+For any decision important enough that one model's word isn't enough — translation / localization QA, legal / compliance review, code review, content moderation, factual or claims verification, design A/B — use the ONE canonical panel; never fork a bespoke two-model/LLM-judge gate.
+
+- **Vendor it:** `node ~/koydo-design/scripts/sync-ai-consensus.mjs --target=koydo-anvil-releases --apply` → `tools/ai-consensus/`.
+- **Use it:** `import { adjudicate } from "./tools/ai-consensus/consensus.mjs"`. Judges in priority order OpenAI → Anthropic → Gemini → xAI; starts with the **two available** (live-probed, so unfunded providers are skipped), **expands** on large divergence, **escalates** to a human / the Opus orchestrator on no majority.
+- Spec: `~/koydo-design/principles/ai-consensus-adjudication.md`. Keys are **server-side only**. Do NOT re-implement two-model review — extend the canon.
+
+## 13. Credential / key rotation — use the ONE tool, never hand-roll
+
+To rotate ANY key (OpenAI, Anthropic, Gemini, xAI, Supabase, Stripe, RevenueCat, …) across every surface, use the canonical tool — do NOT write a one-off rotation script:
+
+1. Put the new value in the vault SSOT (`ENV.md`, the credential's source line).
+2. `node ~/koydo-design/scripts/rotate-credential.mjs <name>` (dry-run) → `… --apply`.
+
+It fans the value out to ENV.md, both Supabase projects, every Vercel project holding any alias of the key, and local `.env`s — dry-run by default, verifies after, reads values only at runtime (never prints them), records to `TASKS/1-USER`, and **honors `CLAIMS.md`**. Add new keys / aliases in `~/koydo-design/scripts/credential-surfaces.json`. `--only <envmd|supabase|vercel|local>` limits to one surface. Vercel changes apply on each app's next deploy; don't revoke the old key until apps cycle.
